@@ -1,0 +1,50 @@
+#my-custom-banner {
+  font-family: "Arial", sans-serif; /* Choose a font that matches the website */
+  position: relative; /* Adjust as necessary based on the page's layout */
+  width: 100%; /* Full width */
+  max-width: 600px; /* Or the width you prefer */
+  margin: 20px auto; /* Centering the banner */
+  padding: 20px; /* Padding inside the banner */
+  background-color: #d2f94b; /* Green background */
+  color: black; /* White text */
+  border-radius: 10px; /* Rounded corners */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: if you want shadow */
+}
+.banner-icon {
+  width: 40px; /* or the size you prefer */
+  height: auto;
+  margin-right: 10px; /* to create some space between the image and the text */
+}
+
+.resume-match {
+  background-color: #fff; /* White background for the match percentage box */
+  border-radius: 10px; /* Rounded corners */
+  padding: 5px 15px; /* Padding inside the match box */
+  margin-left: 10px; /* Space between the text and the match box */
+  color: black;
+}
+
+.progress-bar {
+  background-color: #f1f1f1; /* Light grey background */
+  border-radius: 10px; /* Rounded corners */
+  width: 50%; /* Width of the progress bar */
+  height: 20px; /* Height of the progress bar */
+}
+
+.progress {
+  background-color: #fff; /* White progress indicator */
+  width: 53%; /* Percentage of the progress */
+  height: 100%;
+  border-radius: 10px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px; /* Larger close button */
+  color: #fff; /* White close button */
+  cursor: pointer;
+}

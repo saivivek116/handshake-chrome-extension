@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Handshake Extension",
+  "version": "1.0",
+  "description": "A description of your extension.",
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon16.png",
+    "128": "images/icon16.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["images/icon16.png"],
+      "matches": ["https://app.joinhandshake.com/*"]
+    }
+  ],
+  "permissions": ["activeTab"],
+  "host_permissions": ["https://app.joinhandshake.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://app.joinhandshake.com/stu/jobs/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "action": {
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon16.png",
+      "128": "images/icon16.png"
+    }
+  }
+}
