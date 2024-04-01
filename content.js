@@ -1,3 +1,4 @@
+//this file interacts with the DOM of the page
 function insertBanner() {
   var bannerHtml = `<div id="my-custom-banner">
    <img src="${chrome.runtime.getURL(
@@ -14,6 +15,19 @@ function insertBanner() {
     "div.style__application-flow-new___JIHOx"
   );
 
+  const button = document.createElement('button');
+  button.className = 'take-test-button';
+  button.textContent = 'Take Test';
+  button.style.bottom = '20px';
+  button.style.right = '20px';
+  button.style.zIndex = '1000';
+
+  button.addEventListener('click', () => {
+    chrome.runtime.sendMessage({action: "openTestWindow"});
+});
+
+
+
   if (targetDiv) {
     targetDiv.insertAdjacentHTML("afterend", bannerHtml);
     var closeButton = document.querySelector("#my-custom-banner .close-btn");
@@ -22,6 +36,8 @@ function insertBanner() {
         document.querySelector("#my-custom-banner").remove();
       });
     }
+    // insert test button
+    targetDiv.appendChild(button);
   } else {
     console.log("Target div still not found after DOM changes.");
   }

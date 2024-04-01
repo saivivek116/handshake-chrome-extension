@@ -1,0 +1,7 @@
+body {
+    width: 20rem; /* Adjust width as needed */
+    min-height: 15rem; /* Adjust height as needed */
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+    font-size: 1rem; /* Base font size for elements within the popup */
+}
