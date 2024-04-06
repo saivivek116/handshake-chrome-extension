@@ -16,7 +16,6 @@ body{
     background: #007bff;
 }
 
-.start_btn,
 .info_box,
 .quiz_box,
 .result_box{
@@ -215,6 +214,10 @@ section .option_list .option:hover{
     border: 1px solid #b8daff;
 }
 
+section .option_list .option.selected{
+    border: 3px solid #007bff;
+}
+
 section .option_list .option.correct{
     color: #155724;
     background: #d4edda;
@@ -277,7 +280,7 @@ footer .total_que span p:first-child{
     padding-left: 0px;
 }
 
-footer button{
+footer .next_btn{
     height: 40px;
     padding: 0 13px;
     font-size: 18px;
@@ -285,22 +288,24 @@ footer button{
     cursor: pointer;
     border: none;
     outline: none;
-    color: #fff;
+    color: #000;
     border-radius: 5px;
-    background: #007bff;
-    border: 1px solid #007bff;
+    background: gray;
+    border: 1px solid gray;
     line-height: 10px;
-    opacity: 0;
+    /* opacity: 0; */
     pointer-events: none;
     transform: scale(0.95);
     transition: all 0.3s ease;
 }
 
-footer button:hover{
+footer .next_btn:hover{
     background: #0263ca;
 }
 
-footer button.show{
+footer .next_btn.show{
+    background: #007bff;
+    border: 1px solid #007bff;
     opacity: 1;
     pointer-events: auto;
     transform: scale(1);

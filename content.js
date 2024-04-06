@@ -1,4 +1,5 @@
 //this file interacts with the DOM of the page
+// import { testTaken } from "./test";
 function insertBanner() {
   var bannerHtml = `<div id="my-custom-banner">
    <img src="${chrome.runtime.getURL(
@@ -16,7 +17,13 @@ function insertBanner() {
   );
 
   const button = document.createElement('button');
-  button.className = 'take-test-button';
+
+  // if(testTaken){
+  //   button.disabled = true;
+  //   button.textContent = 'Test Taken';
+  // }else{
+  //   button.className = 'take-test-button';
+  // }
   button.textContent = 'Take Test';
   button.style.bottom = '20px';
   button.style.right = '20px';
