@@ -18,10 +18,12 @@ body{
 
 .info_box,
 .quiz_box,
-.result_box{
+.result_box,
+.error_box{
     position: absolute;
     top: 50%;
     left: 50%;
+    opacity: 0;
     transform: translate(-50%, -50%);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
                 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -29,12 +31,14 @@ body{
 
 .info_box.activeInfo,
 .quiz_box.activeQuiz,
-.result_box.activeResult{
+.result_box.activeResult,
+.error_box.activeError{
     opacity: 1;
     z-index: 5;
     pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
 }
+
 
 .start_btn button{
     font-size: 25px;
@@ -58,7 +62,8 @@ body{
     transition: all 0.3s ease;
 }
 
-.info_box .info-title{
+.info_box .info-title,
+.error_box.activeError{
     height: 60px;
     width: 100%;
     border-bottom: 1px solid lightgrey;
@@ -68,6 +73,13 @@ body{
     border-radius: 5px 5px 0 0;
     font-size: 20px;
     font-weight: 600;
+}
+
+.error_box.activeError{
+    width: auto;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
 }
 
 .info_box .info-list{
