@@ -3,7 +3,7 @@ let questions = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     //fetch the questions from the server
-    fetch('https://requestly.tech/api/mockv2/questions?teamId=2dwMVYYRZiPLoMuewEgl').then(response => response.json()).then(data => {
+    fetch('http://127.0.0.1:3000/get-questions').then(response => response.json()).then(data => {
         questions = data;
         if(questions.length === 0){
             throw new Error('No questions found');
@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let errorElement = document.querySelector('.error_box');
         errorElement.classList.add('activeError');
     });
-    console.log(questions);
 });
 
 
@@ -52,8 +51,6 @@ start_btn.onclick = ()=>{
 let timeValue =  15;
 let que_count = 0;
 let que_numb = 1;
-let userScore = 0;
-// exporttestTaken = false;
 let counter;
 let counterLine;
 let widthValue = 0;
@@ -90,8 +87,8 @@ function handleNextQuestion() {
         }else{
             clearInterval(counter); //clear counter
             clearInterval(counterLine); //clear counterLine
-            showResult(); //calling showResult function
-            setTimeout(() => {window.close();}, 5000);
+            sendResult(); //calling showResult function
+            
             
         }
         next_btn.classList.remove("show"); //hide the next button
@@ -186,29 +183,31 @@ function optionSelected(answer){
     next_btn.classList.add("show"); //show the next button if user selected any option
 }
 
-function showResult(){
-    userResponses.forEach((response, index) => {
-        if(response === questions[index].answer){
-            userScore += 1;
-        }
+function sendResult(){
+    //call api to post the result
+    fetch('http://127.0.0.1:3000/submit-answers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        //send questions along with the answe in the body
+        body: JSON.stringify({questions, userResponses})
+    }).then(response => response.json()).then(data => {
+        console.log('Test submitted successfully', data);
+        info_box.classList.remove("activeInfo"); //hide info box
+        quiz_box.classList.remove("activeQuiz"); //hide quiz box
+        result_box.classList.add("activeResult"); //show result box
+        const scoreText = result_box.querySelector(".score_text");
+        let scoreTag = '<span> Test Submitted successfully!</span>';
+        scoreText.innerHTML = scoreTag;
+    }).
+    catch(error => {
+        console.error('Error submitting answers', error);
+    }).finally(() => {
+        window.close();
     });
-    info_box.classList.remove("activeInfo"); //hide info box
-    quiz_box.classList.remove("activeQuiz"); //hide quiz box
-    result_box.classList.add("activeResult"); //show result box
-    const scoreText = result_box.querySelector(".score_text");
-    if (userScore > 3){ // if user scored more than 3
-        //creating a new span tag and passing the user score number and total question number
-        let scoreTag = '<span>and congrats! 🎉, You got <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
-        scoreText.innerHTML = scoreTag;  //adding new span tag inside score_Text
-    }
-    else if(userScore > 1){ // if user scored more than 1
-        let scoreTag = '<span>and nice 😎, You got <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
-        scoreText.innerHTML = scoreTag;
-    }
-    else{ // if user scored less than 1
-        let scoreTag = '<span>and sorry 😐, You got only <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
-        scoreText.innerHTML = scoreTag;
-    }
+
+
 }
 
 function startTimer(time){
