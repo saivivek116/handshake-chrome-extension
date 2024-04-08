@@ -25,6 +25,7 @@ function insertBanner() {
   //   button.className = 'take-test-button';
   // }
   button.textContent = 'Take Test';
+  button.classList.add('take-test-button');
   button.style.bottom = '20px';
   button.style.right = '20px';
   button.style.zIndex = '1000';

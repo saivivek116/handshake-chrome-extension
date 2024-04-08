@@ -1,74 +1,21 @@
 
-let questions = [
-    {
-    numb: 1,
-    question: "What does HTML stand for?",
-    answer: "Hyper Text Markup Language",
-    options: [
-      "Hyper Text Preprocessor",
-      "Hyper Text Markup Language",
-      "Hyper Text Multiple Language",
-      "Hyper Tool Multi Language"
-    ]
-  },
-    {
-    numb: 2,
-    question: "What does CSS stand for?",
-    answer: "Cascading Style Sheet",
-    options: [
-      "Common Style Sheet",
-      "Colorful Style Sheet",
-      "Computer Style Sheet",
-      "Cascading Style Sheet"
-    ]
-  },
-    {
-    numb: 3,
-    question: "What does PHP stand for?",
-    answer: "Hypertext Preprocessor",
-    options: [
-      "Hypertext Preprocessor",
-      "Hypertext Programming",
-      "Hypertext Preprogramming",
-      "Hometext Preprocessor"
-    ]
-  },
-    {
-    numb: 4,
-    question: "What does SQL stand for?",
-    answer: "Structured Query Language",
-    options: [
-      "Stylish Question Language",
-      "Stylesheet Query Language",
-      "Statement Question Language",
-      "Structured Query Language"
-    ]
-  },
-    {
-    numb: 5,
-    question: "What does XML stand for?",
-    answer: "eXtensible Markup Language",
-    options: [
-      "eXtensible Markup Language",
-      "eXecutable Multiple Language",
-      "eXTra Multi-Program Language",
-      "eXamine Multiple Language"
-    ]
-  },
-  
+let questions = [];
 
-     {
-     numb: 6,
-     question: "Your Question is Here",
-  
-     options: [
-       "Option 1",
-       "option 2",
-       "option 3",
-       "option 4"
-    ]
-   },
-];
+document.addEventListener('DOMContentLoaded', () => {
+    //fetch the questions from the server
+    fetch('http://127.0.0.1:3000/get-questions').then(response => response.json()).then(data => {
+        questions = data;
+        if(questions.length === 0){
+            throw new Error('No questions found');
+        }
+        info_box.classList.add("activeInfo");
+    }).catch(error => {
+        console.error('Error fetching questions', error);
+        let errorElement = document.querySelector('.error_box');
+        errorElement.classList.add('activeError');
+    });
+});
+
 
 let userResponses = [];
 //selecting all required elements
@@ -83,7 +30,6 @@ const time_line = document.querySelector("header .time_line");
 const timeText = document.querySelector(".timer .time_left_txt");
 const timeCount = document.querySelector(".timer .timer_sec");
 
-info_box.classList.add("activeInfo");
 
 // if exitQuiz button clicked
 exit_btn.onclick = ()=>{
@@ -105,8 +51,6 @@ start_btn.onclick = ()=>{
 let timeValue =  15;
 let que_count = 0;
 let que_numb = 1;
-let userScore = 0;
-// exporttestTaken = false;
 let counter;
 let counterLine;
 let widthValue = 0;
@@ -114,24 +58,7 @@ let widthValue = 0;
 // const restart_quiz = result_box.querySelector(".buttons .restart");
 const quit_quiz = result_box.querySelector(".buttons .quit");
 
-// if restartQuiz button clicked
-// restart_quiz.onclick = ()=>{
-//     quiz_box.classList.add("activeQuiz"); //show quiz box
-//     result_box.classList.remove("activeResult"); //hide result box
-//     timeValue = 15; 
-//     que_count = 0;
-//     que_numb = 1;
-//     userScore = 0;
-//     widthValue = 0;
-//     showQuetions(que_count); //calling showQestions function
-//     queCounter(que_numb); //passing que_numb value to queCounter
-//     clearInterval(counter); //clear counter
-//     clearInterval(counterLine); //clear counterLine
-//     startTimer(timeValue); //calling startTimer function
-//     startTimerLine(widthValue); //calling startTimerLine function
-//     timeText.textContent = "Time Left"; //change the text of timeText to Time Left
-//     next_btn.classList.remove("show"); //hide the next button
-// }
+
 
 // if quitQuiz button clicked
 quit_quiz.onclick = ()=>{
@@ -160,8 +87,8 @@ function handleNextQuestion() {
         }else{
             clearInterval(counter); //clear counter
             clearInterval(counterLine); //clear counterLine
-            showResult(); //calling showResult function
-            setTimeout(() => {window.close();}, 5000);
+            sendResult(); //calling showResult function
+            
             
         }
         next_btn.classList.remove("show"); //hide the next button
@@ -175,7 +102,7 @@ function showQuetions(index){
     const que_text = document.querySelector(".que_text");
 
     //creating a new span and div tag for question and option and passing the value using array index
-    let que_tag = '<span>'+ questions[index].numb + ". " + questions[index].question +'</span>';
+    let que_tag = '<span>'+ `${index+1}` + ". " + questions[index].question +'</span>';
 
     let option_tag = '<div class="option"><span>'+ questions[index].options[0] +'</span></div>'
     + '<div class="option"><span>'+ questions[index].options[1] +'</span></div>'
@@ -256,29 +183,31 @@ function optionSelected(answer){
     next_btn.classList.add("show"); //show the next button if user selected any option
 }
 
-function showResult(){
-    userResponses.forEach((response, index) => {
-        if(response === questions[index].answer){
-            userScore += 1;
-        }
+function sendResult(){
+    //call api to post the result
+    fetch('http://127.0.0.1:3000/submit-answers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        //send questions along with the answe in the body
+        body: JSON.stringify({questions, userResponses})
+    }).then(response => response.json()).then(data => {
+        console.log('Test submitted successfully', data);
+        info_box.classList.remove("activeInfo"); //hide info box
+        quiz_box.classList.remove("activeQuiz"); //hide quiz box
+        result_box.classList.add("activeResult"); //show result box
+        const scoreText = result_box.querySelector(".score_text");
+        let scoreTag = '<span> Test Submitted successfully!</span>';
+        scoreText.innerHTML = scoreTag;
+    }).
+    catch(error => {
+        console.error('Error submitting answers', error);
+    }).finally(() => {
+        window.close();
     });
-    info_box.classList.remove("activeInfo"); //hide info box
-    quiz_box.classList.remove("activeQuiz"); //hide quiz box
-    result_box.classList.add("activeResult"); //show result box
-    const scoreText = result_box.querySelector(".score_text");
-    if (userScore > 3){ // if user scored more than 3
-        //creating a new span tag and passing the user score number and total question number
-        let scoreTag = '<span>and congrats! 🎉, You got <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
-        scoreText.innerHTML = scoreTag;  //adding new span tag inside score_Text
-    }
-    else if(userScore > 1){ // if user scored more than 1
-        let scoreTag = '<span>and nice 😎, You got <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
-        scoreText.innerHTML = scoreTag;
-    }
-    else{ // if user scored less than 1
-        let scoreTag = '<span>and sorry 😐, You got only <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
-        scoreText.innerHTML = scoreTag;
-    }
+
+
 }
 
 function startTimer(time){
