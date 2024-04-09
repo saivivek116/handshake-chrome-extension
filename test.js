@@ -3,7 +3,10 @@ let questions = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     //fetch the questions from the server
-    fetch('http://127.0.0.1:3000/get-questions').then(response => response.json()).then(data => {
+    let loader_ele = document.querySelector('.loader_container');
+    loader_ele.classList.add('activeLoader');
+    fetch('https://requestly.tech/api/mockv2/questions?teamId=2dwMVYYRZiPLoMuewEgl').then(response => response.json()).then(data => {
+        loader_ele.classList.remove('activeLoader');
         questions = data;
         if(questions.length === 0){
             throw new Error('No questions found');
@@ -54,7 +57,7 @@ let que_numb = 1;
 let counter;
 let counterLine;
 let widthValue = 0;
-
+// export let examFinished = false;
 // const restart_quiz = result_box.querySelector(".buttons .restart");
 const quit_quiz = result_box.querySelector(".buttons .quit");
 
@@ -184,6 +187,13 @@ function optionSelected(answer){
 }
 
 function sendResult(){
+    info_box.classList.remove("activeInfo"); //hide info box
+    quiz_box.classList.remove("activeQuiz"); //hide quiz box
+    result_box.classList.add("activeResult"); //show result box
+    const scoreText = result_box.querySelector(".score_text");
+    let scoreTag = '<span> Test Submitted successfully!</span>';
+    scoreText.innerHTML = scoreTag;
+    examFinished = true;
     //call api to post the result
     fetch('http://127.0.0.1:3000/submit-answers', {
         method: 'POST',
@@ -194,12 +204,7 @@ function sendResult(){
         body: JSON.stringify({questions, userResponses})
     }).then(response => response.json()).then(data => {
         console.log('Test submitted successfully', data);
-        info_box.classList.remove("activeInfo"); //hide info box
-        quiz_box.classList.remove("activeQuiz"); //hide quiz box
-        result_box.classList.add("activeResult"); //show result box
-        const scoreText = result_box.querySelector(".score_text");
-        let scoreTag = '<span> Test Submitted successfully!</span>';
-        scoreText.innerHTML = scoreTag;
+        
     }).
     catch(error => {
         console.error('Error submitting answers', error);
