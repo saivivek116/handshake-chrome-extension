@@ -157,7 +157,7 @@ function sendResult(){
     quiz_box.classList.remove("activeQuiz"); //hide quiz box
     result_box.classList.add("activeResult"); //show result box
     const scoreText = result_box.querySelector(".score_text");
-    let scoreTag = '<span> Test Submitted successfully!</span>';
+    let scoreTag = '<span> Test Submitted successfully!<br> This window will automatically close</span>';
     scoreText.innerHTML = scoreTag;
     examFinished = true;
     //call api to post the result
@@ -175,7 +175,9 @@ function sendResult(){
     catch(error => {
         console.error('Error submitting answers', error);
     }).finally(() => {
-        window.close();
+       setTimeout(() => {
+            window.close();
+       }, 10000); 
     });
 
 
