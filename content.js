@@ -75,7 +75,8 @@ async function insertBanner() {
     button.style.bottom = "20px";
     button.style.right = "20px";
     button.style.zIndex = "1000";
-
+    button.style.color = "white";
+    button.style.backgroundColor = "black";
     button.addEventListener("click", () => {
       chrome.runtime.sendMessage({ action: "openTestWindow" });
     });
