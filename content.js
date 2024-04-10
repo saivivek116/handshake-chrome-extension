@@ -66,16 +66,6 @@ function insertBanner() {
     chrome.runtime.sendMessage({ action: "openTestWindow" });
   });
 
-  button.textContent = "Take Test";
-  button.classList.add("take-test-button");
-  button.style.bottom = "20px";
-  button.style.right = "20px";
-  button.style.zIndex = "1000";
-
-  button.addEventListener("click", () => {
-    chrome.runtime.sendMessage({ action: "openTestWindow" });
-  });
-
   if (targetDiv) {
     targetDiv.insertAdjacentHTML("afterend", bannerHtml);
     var closeButton = document.querySelector("#my-custom-banner .close-btn");

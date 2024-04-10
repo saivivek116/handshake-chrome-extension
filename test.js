@@ -1,5 +1,51 @@
 
-let questions = [];
+let questions = [
+    {
+        "options": [
+            "Ability to focus on a single project without distractions",
+            "Inability to handle multiple tasks at once",
+            "Ability to work on multiple projects simultaneously without supervision",
+            "Ability to work only under supervision"
+        ],
+        "question": "What does the skill 'Ability to work independently and manage multiple projects' entail?"
+    },
+    {
+        "options": [
+            "Having a degree in marketing",
+            "Ability to set clear product goals, prioritize features, and predict market trends",
+            "Being able to code in multiple programming languages",
+            "Knowing how to use Excel proficiently"
+        ],
+        "question": "What does the ability to define product strategy and roadmap entail?"
+    },
+    {
+        "options": [
+            "Overseeing the product from development, to launch, to customer feedback and eventual product updates or discontinuation",
+            "Only marketing and selling the product",
+            "Only developing new product features",
+            "Only handling customer complaints about the product"
+        ],
+        "question": "What does experience managing a product throughout its lifecycle entail?"
+    },
+    {
+        "options": [
+            "The ability to predict product sales in the future",
+            "The chance to influence the direction and development of a product",
+            "The opportunity to advertise the product in the future",
+            "The ability to change the product's packaging in the future"
+        ],
+        "question": "What does the skill 'Opportunity to shape the future of the product' mean?"
+    },
+    {
+        "options": [
+            "To provide topics for business meetings",
+            "To decorate the office with colorful graphs and charts",
+            "To entertain employees during break times",
+            "To measure the effectiveness of business strategies and objectives"
+        ],
+        "question": "What is the primary purpose of developing and monitoring key performance indicators (KPIs) in a business setting?"
+    }
+];
 
 document.addEventListener('DOMContentLoaded', () => {
     //fetch the questions from the server
