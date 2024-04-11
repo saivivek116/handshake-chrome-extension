@@ -34,34 +34,34 @@ function insertShimmerLoader() {
 async function insertBanner() {
   insertShimmerLoader();
   try {
-    const apiUrl = "http://127.0.0.1:3000/get-job-matching-insights";
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    var bannerHtml = `
-      <div id="my-custom-banner">
-        <img src="${chrome.runtime.getURL(
-          "images/icon16.png"
-        )}" alt="Icon" class="banner-icon">
-        <span><strong>${data.MatchingSkills?.length} of ${
-      data.MatchingSkills?.length + data.SkillsNotInResume?.length
-    } keywords</strong> are present in your resume</span>
-        <div class="progress-bar">
-        <div class="progress"></div>
-        </div>
-        <span class="resume-match">${parseInt(
-          data.MatchPercentage
-        )}% resume match</span>
-              </div>
-      <div class="box-container">
-        <div class="box">What are the core responsibilities of this job?</div>
-        <div class="box">What is the typical career path for someone in this role?</div>
-        <div class="box">What specific programming languages and technologies should a candidate be proficient in for this role?</div>
-        <div class="box">Help me develop important leadership skills?</div>
-      </div>
-    `;
+    // const apiUrl = "http://127.0.0.1:3000/get-job-matching-insights";
+    // const response = {"ok":false }//await fetch(apiUrl);
+    // if (!response.ok) {
+    //   // throw new Error("Network response was not ok");
+    // }
+    // const data = await response.json();
+    // var bannerHtml = `
+    //   <div id="my-custom-banner">
+    //     <img src="${chrome.runtime.getURL(
+    //       "images/icon16.png"
+    //     )}" alt="Icon" class="banner-icon">
+    //     <span><strong>${data.MatchingSkills?.length} of ${
+    //   data.MatchingSkills?.length + data.SkillsNotInResume?.length
+    // } keywords</strong> are present in your resume</span>
+    //     <div class="progress-bar">
+    //     <div class="progress"></div>
+    //     </div>
+    //     <span class="resume-match">${parseInt(
+    //       data.MatchPercentage
+    //     )}% resume match</span>
+    //           </div>
+    //   <div class="box-container">
+    //     <div class="box">What are the core responsibilities of this job?</div>
+    //     <div class="box">What is the typical career path for someone in this role?</div>
+    //     <div class="box">What specific programming languages and technologies should a candidate be proficient in for this role?</div>
+    //     <div class="box">Help me develop important leadership skills?</div>
+    //   </div>
+    // `;
 
     var targetDiv = document.querySelector(
       "div.style__application-flow-new___JIHOx"
@@ -78,11 +78,23 @@ async function insertBanner() {
     button.style.color = "white";
     button.style.backgroundColor = "black";
     button.addEventListener("click", () => {
-      chrome.runtime.sendMessage({ action: "openTestWindow" });
+      const jobUrl = window.location.href;
+      chrome.runtime.sendMessage({ action: "openTestWindow", jobUrl: jobUrl});
     });
 
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      console.log("Message received in content script:", message)
+      if (message.action === "updateTestStatus") {
+        if (message.appliedJobs.includes(window.location.href)) {
+          button.disabled = true;
+          button.textContent = "Test already taken";
+        }
+      }
+    });
+
+
     if (targetDiv) {
-      targetDiv.insertAdjacentHTML("afterend", bannerHtml);
+      // targetDiv.insertAdjacentHTML("afterend", bannerHtml);
       // var closeButton = document.querySelector("#my-custom-banner .close-btn");
       // if (closeButton) {
       //   closeButton.addEventListener("click", function () {

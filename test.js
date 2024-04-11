@@ -1,10 +1,12 @@
 let questions = [];
-
+let jobUrl = "";
 document.addEventListener("DOMContentLoaded", () => {
   //fetch the questions from the server
   let loader_ele = document.querySelector(".loader_container");
+  const params = new URLSearchParams(window.location.search);
+  jobUrl = params.get('jobUrl');
   loader_ele.classList.add("activeLoader");
-  fetch("http://127.0.0.1:3000/get-questions")
+  fetch("https://requestly.tech/api/mockv2/questions?teamId=2dwMVYYRZiPLoMuewEgl")
     .then((response) => response.json())
     .then((data) => {
       loader_ele.classList.remove("activeLoader");
@@ -158,6 +160,10 @@ function selectAnswer(button, option, questionIndex) {
 }
 
 function sendResult() {
+  console.log("jobUrl", jobUrl);
+  if(jobUrl){
+    chrome.runtime.sendMessage({ action: "setAppliedJob", jobUrl: jobUrl });
+  }
   info_box.classList.remove("activeInfo"); //hide info box
   quiz_box.classList.remove("activeQuiz"); //hide quiz box
   result_box.classList.add("activeResult"); //show result box
@@ -167,7 +173,7 @@ function sendResult() {
   scoreText.innerHTML = scoreTag;
   examFinished = true;
   //call api to post the result
-  fetch("http://127.0.0.1:3000/submit-answers", {
+  fetch("https://requestly.tech/api/mockv2/submit-answers?teamId=2dwMVYYRZiPLoMuewEgl", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -185,7 +191,7 @@ function sendResult() {
     .finally(() => {
       setTimeout(() => {
         window.close();
-      }, 10000);
+      }, 100000);
     });
 }
 

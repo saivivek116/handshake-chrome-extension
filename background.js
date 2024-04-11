@@ -1,8 +1,10 @@
+let appliedJobs = [];
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Handle the 'openTestWindow' action
   if (message.action === "openTestWindow") {
+    const testPageUrl = `test.html?jobUrl=${encodeURIComponent(message.jobUrl)}`; 
     chrome.windows.create({
-      url: "test.html", // Ensure this is the correct path to your HTML file
+      url: testPageUrl, // Ensure this is the correct path to your HTML file
       type: "popup", // 'panel' type might not be supported in all Chrome versions
       // Optional dimensions
       width: 800,
@@ -22,4 +24,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       height: 600,
     });
   }
+
+  if(message.action === "setAppliedJob") {
+    appliedJobs.push(message.jobUrl);
+    chrome.runtime.sendMessage({ action: "updateTestStatus", appliedJobs });
+  }
+
 });
